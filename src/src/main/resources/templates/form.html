@@ -9,11 +9,12 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h2 class="text-center mb-4">Thêm công việc</h2>
+    <h2 class="text-center mb-4" th:text="${todo.id} != null ? 'Sua cong viec' : 'Them cong viec'"></h2>
 
     <div class="card shadow-sm">
         <div class="card-body">
             <form th:action="@{/form}" method="post" th:object="${todo}">
+                <input type="hidden" th:field="*{id}">
                 <div class="form-group">
                     <label for="content">Nội dung</label>
                     <input id="content" type="text" class="form-control" th:field="*{content}">
@@ -44,7 +45,7 @@
                 </div>
 
                 <div class="d-flex">
-                    <button class="btn btn-primary">Lưu công việc</button>
+                    <button class="btn btn-primary" th:text="${todo.id} != null ? 'Cap nhat cong viec' : 'Luu cong viec'"></button>
                     <a class="btn btn-secondary ml-2" th:href="@{/list}">Quay lại danh sách</a>
                 </div>
             </form>

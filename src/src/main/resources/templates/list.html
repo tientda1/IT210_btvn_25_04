@@ -14,6 +14,9 @@
         <a class="btn btn-primary" th:href="@{/form}">Thêm công việc</a>
     </div>
 
+    <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"></div>
+    <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
     <div class="card shadow-sm">
         <div class="card-body">
             <h5 class="mb-3">Danh sách công việc</h5>
@@ -25,11 +28,12 @@
                     <th>Hạn</th>
                     <th>Trạng thái</th>
                     <th>Ưu tiên</th>
+                    <th>Hành động</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:if="${#lists.isEmpty(todos)}">
-                    <td colspan="5" class="text-center text-muted">Chưa có công việc nào</td>
+                    <td colspan="6" class="text-center text-muted">Chưa có công việc nào</td>
                 </tr>
                 <tr th:each="t : ${todos}">
                     <td th:text="${t.id}"></td>
@@ -43,6 +47,13 @@
                         <span th:if="${t.priority == 'LOW'}">LOW</span>
                         <span th:if="${t.priority == 'MEDIUM'}">MEDIUM</span>
                         <span th:if="${t.priority == 'HIGH'}">HIGH</span>
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-warning" th:href="@{/form/{id}(id=${t.id})}">Sửa</a>
+                        <form th:action="@{/delete/{id}(id=${t.id})}" method="post" class="d-inline"
+                              onsubmit="return confirm('Bạn có chắc chắn muốn xóa task này không?');">
+                            <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>

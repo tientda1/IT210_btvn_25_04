@@ -9,7 +9,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
 
 @Controller
 public class TodoController {
@@ -33,6 +37,17 @@ public class TodoController {
         return "form";
     }
 
+    @GetMapping("/form/{id}")
+    public String showEditForm(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
+        Optional<Todo> todoOptional = todoRepository.findById(id);
+        if (todoOptional.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Khong tim thay cong viec voi ID = " + id);
+            return "redirect:/list";
+        }
+        model.addAttribute("todo", todoOptional.get());
+        return "form";
+    }
+
     @PostMapping("/form")
     public String addTodo(@Valid @ModelAttribute("todo") Todo todo,
                           BindingResult bindingResult) {
@@ -40,6 +55,17 @@ public class TodoController {
             return "form";
         }
         todoRepository.save(todo);
+        return "redirect:/list";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteTodo(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        if (!todoRepository.existsById(id)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Khong tim thay cong viec voi ID = " + id);
+            return "redirect:/list";
+        }
+        todoRepository.deleteById(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Da xoa cong viec ID = " + id + " thanh cong");
         return "redirect:/list";
     }
 }
