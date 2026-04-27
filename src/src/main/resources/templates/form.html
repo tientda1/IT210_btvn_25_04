@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Todo Form</title>
+    <title th:text="#{todo.form.title}">Todo Form</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -9,44 +9,55 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h2 class="text-center mb-4" th:text="${todo.id} != null ? 'Sua cong viec' : 'Them cong viec'"></h2>
+    <div class="d-flex justify-content-end mb-3">
+        <a class="btn btn-outline-secondary btn-sm mr-2" th:href="@{/todos(lang='vi')}">VI</a>
+        <a class="btn btn-outline-secondary btn-sm" th:href="@{/todos(lang='en')}">EN</a>
+    </div>
+
+    <h2 class="text-center mb-4">
+        <span th:if="${todo.id != null}" th:text="#{todo.form.edit.heading}">Sua cong viec</span>
+        <span th:unless="${todo.id != null}" th:text="#{todo.form.create.heading}">Them cong viec</span>
+    </h2>
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <form th:action="@{/form}" method="post" th:object="${todo}">
+            <form th:action="@{/todos/form}" method="post" th:object="${todo}">
                 <input type="hidden" th:field="*{id}">
                 <div class="form-group">
-                    <label for="content">Nội dung</label>
+                    <label for="content" th:text="#{todo.table.content}">Noi dung</label>
                     <input id="content" type="text" class="form-control" th:field="*{content}">
                     <small class="text-danger" th:errors="*{content}"></small>
                 </div>
 
                 <div class="form-group">
-                    <label for="dueDate">Hạn</label>
+                    <label for="dueDate" th:text="#{todo.table.dueDate}">Han</label>
                     <input id="dueDate" type="date" class="form-control" th:field="*{dueDate}">
                     <small class="text-danger" th:errors="*{dueDate}"></small>
                 </div>
 
                 <div class="form-group">
-                    <label for="status">Trạng thái</label>
+                    <label for="status" th:text="#{todo.table.status}">Trang thai</label>
                     <select id="status" class="form-control" th:field="*{status}">
-                        <option value="PENDING">PENDING</option>
-                        <option value="DONE">DONE</option>
+                        <option value="PENDING" th:text="#{todo.status.pending}">PENDING</option>
+                        <option value="DONE" th:text="#{todo.status.done}">DONE</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="priority">Ưu tiên</label>
+                    <label for="priority" th:text="#{todo.table.priority}">Uu tien</label>
                     <select id="priority" class="form-control" th:field="*{priority}">
-                        <option value="LOW">LOW</option>
-                        <option value="MEDIUM">MEDIUM</option>
-                        <option value="HIGH">HIGH</option>
+                        <option value="LOW" th:text="#{todo.priority.low}">LOW</option>
+                        <option value="MEDIUM" th:text="#{todo.priority.medium}">MEDIUM</option>
+                        <option value="HIGH" th:text="#{todo.priority.high}">HIGH</option>
                     </select>
                 </div>
 
                 <div class="d-flex">
-                    <button class="btn btn-primary" th:text="${todo.id} != null ? 'Cap nhat cong viec' : 'Luu cong viec'"></button>
-                    <a class="btn btn-secondary ml-2" th:href="@{/list}">Quay lại danh sách</a>
+                    <button class="btn btn-primary">
+                        <span th:if="${todo.id != null}" th:text="#{todo.button.update}">Cap nhat cong viec</span>
+                        <span th:unless="${todo.id != null}" th:text="#{todo.button.save}">Luu cong viec</span>
+                    </button>
+                    <a class="btn btn-secondary ml-2" th:href="@{/todos}" th:text="#{todo.button.backToList}">Quay lai danh sach</a>
                 </div>
             </form>
         </div>

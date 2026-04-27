@@ -18,10 +18,10 @@ public class Todo   {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "Nội dung không được để trống")
+    @NotBlank(message = "{todo.validation.content.notBlank}")
     private String content;
 
-    @FutureOrPresent(message = "Ngày phải từ hiện tại trở đi")
+    @FutureOrPresent(message = "{todo.validation.dueDate.futureOrPresent}")
     private LocalDate dueDate;
 
     private String status;

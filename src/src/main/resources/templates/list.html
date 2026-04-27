@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <title>Todo List</title>
+    <title th:text="#{todo.list.title}">Todo List</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -10,8 +10,15 @@
 <body>
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="mb-0">Todo App</h2>
-        <a class="btn btn-primary" th:href="@{/form}">Thêm công việc</a>
+        <div>
+            <h2 class="mb-1" th:text="#{todo.app.title}">Todo App</h2>
+            <p class="mb-0 text-muted" th:text="#{todo.owner.label(${ownerName})}">Danh sach cua:</p>
+        </div>
+        <div>
+            <a class="btn btn-outline-secondary btn-sm mr-2" th:href="@{/todos(lang='vi')}">VI</a>
+            <a class="btn btn-outline-secondary btn-sm mr-2" th:href="@{/todos(lang='en')}">EN</a>
+            <a class="btn btn-primary" th:href="@{/todos/form}" th:text="#{todo.button.add}">Them cong viec</a>
+        </div>
     </div>
 
     <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"></div>
@@ -19,40 +26,40 @@
 
     <div class="card shadow-sm">
         <div class="card-body">
-            <h5 class="mb-3">Danh sách công việc</h5>
+            <h5 class="mb-3" th:text="#{todo.list.heading}">Danh sach cong viec</h5>
             <table class="table table-bordered">
                 <thead class="thead-dark">
                 <tr>
-                    <th>ID</th>
-                    <th>Nội dung</th>
-                    <th>Hạn</th>
-                    <th>Trạng thái</th>
-                    <th>Ưu tiên</th>
-                    <th>Hành động</th>
+                    <th th:text="#{todo.table.id}">ID</th>
+                    <th th:text="#{todo.table.content}">Noi dung</th>
+                    <th th:text="#{todo.table.dueDate}">Han</th>
+                    <th th:text="#{todo.table.status}">Trang thai</th>
+                    <th th:text="#{todo.table.priority}">Uu tien</th>
+                    <th th:text="#{todo.table.actions}">Hanh dong</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:if="${#lists.isEmpty(todos)}">
-                    <td colspan="6" class="text-center text-muted">Chưa có công việc nào</td>
+                    <td colspan="6" class="text-center text-muted" th:text="#{todo.table.empty}">Chua co cong viec nao</td>
                 </tr>
                 <tr th:each="t : ${todos}">
                     <td th:text="${t.id}"></td>
                     <td th:text="${t.content}"></td>
                     <td th:text="${t.dueDate}"></td>
                     <td>
-                        <span th:if="${t.status == 'PENDING'}">PENDING</span>
-                        <span th:if="${t.status == 'DONE'}">DONE</span>
+                        <span th:if="${t.status == 'PENDING'}" th:text="#{todo.status.pending}">PENDING</span>
+                        <span th:if="${t.status == 'DONE'}" th:text="#{todo.status.done}">DONE</span>
                     </td>
                     <td>
-                        <span th:if="${t.priority == 'LOW'}">LOW</span>
-                        <span th:if="${t.priority == 'MEDIUM'}">MEDIUM</span>
-                        <span th:if="${t.priority == 'HIGH'}">HIGH</span>
+                        <span th:if="${t.priority == 'LOW'}" th:text="#{todo.priority.low}">LOW</span>
+                        <span th:if="${t.priority == 'MEDIUM'}" th:text="#{todo.priority.medium}">MEDIUM</span>
+                        <span th:if="${t.priority == 'HIGH'}" th:text="#{todo.priority.high}">HIGH</span>
                     </td>
                     <td>
-                        <a class="btn btn-sm btn-warning" th:href="@{/form/{id}(id=${t.id})}">Sửa</a>
-                        <form th:action="@{/delete/{id}(id=${t.id})}" method="post" class="d-inline"
-                              onsubmit="return confirm('Bạn có chắc chắn muốn xóa task này không?');">
-                            <button type="submit" class="btn btn-sm btn-danger">Xóa</button>
+                        <a class="btn btn-sm btn-warning" th:href="@{/todos/form/{id}(id=${t.id})}" th:text="#{todo.button.edit}">Sua</a>
+                        <form th:action="@{/todos/delete/{id}(id=${t.id})}" method="post" class="d-inline"
+                              th:attr="onsubmit=|return confirm('${#messages.msg('todo.delete.confirm')}');|">
+                            <button type="submit" class="btn btn-sm btn-danger" th:text="#{todo.button.delete}">Xoa</button>
                         </form>
                     </td>
                 </tr>
